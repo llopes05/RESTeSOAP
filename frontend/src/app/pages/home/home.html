@@ -1,0 +1,105 @@
+
+
+<app-navbar></app-navbar>
+
+<div style="padding: 2rem;">
+  <h1>Bem-vindo ao Centro Logístico</h1>
+  
+  <div style="margin: 2rem 0;">
+    <h3 style="margin-bottom: 1rem;">Visualizar dados de:</h3>
+    <p-selectButton 
+      [options]="viewOptions" 
+      [(ngModel)]="selectedView" 
+      optionLabel="label" 
+      optionValue="value">
+      <ng-template #item let-item>
+        <i [class]="item.icon" style="margin-right: 0.5rem;"></i>
+        <span>{{ item.label }}</span>
+      </ng-template>
+    </p-selectButton>
+  </div>
+  
+  <p-table
+    #dt
+    [value]="currentData"
+    [rows]="10"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'categoria']"
+    showGridlines
+    [tableStyle]="{ 'min-width': '60rem' }">
+    
+    <ng-template #caption>
+        <div class="flex" *ngIf="selectedView === 'estoque'">
+            <p-iconfield iconPosition="left" class="ml-auto">
+                <p-inputicon>
+                    <i class="pi pi-search"></i>
+                </p-inputicon>
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Pesquisar produtos..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+    
+    <ng-template #header>
+            <tr *ngIf="selectedView === 'estoque'"> <!-- estoque -->
+                <th pSortableColumn="id" style="width:20%">
+                    <div class="flex items-center gap-2">
+                        ID
+                        <p-sortIcon field="id" />
+                    </div>
+                </th>
+                <th pSortableColumn="name" style="width:30%">
+                    <div class="flex items-center gap-2">
+                        Name
+                        <p-sortIcon field="name" />
+                    </div>
+                </th>
+                <th pSortableColumn="categoria" style="width:25%">
+                    <div class="flex items-center gap-2">
+                        Categoria
+                        <p-sortIcon field="categoria" />
+                    </div>
+                </th>
+                <th pSortableColumn="quantidade" style="width:25%">
+                    <div class="flex items-center gap-2">
+                        Quantidade
+                        <p-sortIcon field="quantidade" />
+                    </div>
+                </th>
+            </tr>
+             <tr *ngIf="selectedView === 'pedidos'">  <!-- pedidos -->
+                <th pSortableColumn="id" style="width:15%">
+                    <div class="flex items-center gap-2">
+                        ID
+                        <p-sortIcon field="id" />
+                    </div>
+                </th>
+                <th pSortableColumn="para" style="width:40%">
+                    <div class="flex items-center gap-2">
+                        Para
+                        <p-sortIcon field="para" />
+                    </div>
+                </th>
+                <th style="width:45%">Item(s)</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-item>
+            <tr *ngIf="selectedView === 'estoque'">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.quantidade }}</td>
+            </tr>
+            <tr *ngIf="selectedView === 'pedidos'">
+                <td>{{ item.id }}</td>
+                <td>{{ item.para }}</td>
+                <td>
+                    <div *ngFor="let produto of item.items" style="margin-bottom: 0.25rem;">
+                        <strong>{{ produto.name }}</strong> - Qtd: {{ produto.quantidade }}
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+  </p-table>
+</div>
+

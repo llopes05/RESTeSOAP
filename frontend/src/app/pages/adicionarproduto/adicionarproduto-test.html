@@ -1,0 +1,121 @@
+<app-navbar></app-navbar>
+
+<div style="padding: 2rem; max-width: 800px; margin: 0 auto; background: #1f2937; color: #ffffff; min-height: 100vh;">
+  <h1 style="color: #ffffff; margin-bottom: 0.5rem; font-size: 2rem;">Adicionar Produto</h1>
+  <p style="color: #9ca3af; margin-bottom: 2rem;">Preencha as informações abaixo para adicionar um novo produto ao estoque.</p>
+  
+  <div style="background: #374151; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+    <form (ngSubmit)="adicionarProduto()" #produtoForm="ngForm">
+      <!-- Nome do Produto -->
+      <div style="margin-bottom: 1.5rem;">
+        <label for="nome" style="display: block; margin-bottom: 0.5rem; color: #ffffff; font-weight: 500;">
+          Nome do Produto *
+        </label>
+        <input 
+          type="text" 
+          id="nome"
+          name="nome"
+          [(ngModel)]="produto.name"
+          required
+          placeholder="Digite o nome do produto"
+          style="width: 100%; padding: 0.75rem; background: #4b5563; border: 1px solid #6b7280; border-radius: 6px; color: #ffffff; font-size: 1rem;"
+          #nomeInput="ngModel"
+        />
+        <small 
+          *ngIf="nomeInput.invalid && nomeInput.touched" 
+          style="color: #f87171; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Nome do produto é obrigatório
+        </small>
+      </div>
+
+      <!-- Quantidade -->
+      <div style="margin-bottom: 1.5rem;">
+        <label for="quantidade" style="display: block; margin-bottom: 0.5rem; color: #ffffff; font-weight: 500;">
+          Quantidade em Estoque *
+        </label>
+        <input 
+          type="number" 
+          id="quantidade"
+          name="quantidade"
+          [(ngModel)]="produto.quantidade"
+          required
+          min="0"
+          placeholder="0"
+          style="width: 100%; padding: 0.75rem; background: #4b5563; border: 1px solid #6b7280; border-radius: 6px; color: #ffffff; font-size: 1rem;"
+          #quantidadeInput="ngModel"
+        />
+        <small 
+          *ngIf="quantidadeInput.invalid && quantidadeInput.touched" 
+          style="color: #f87171; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Quantidade é obrigatória
+        </small>
+      </div>
+
+      <!-- Categoria -->
+      <div style="margin-bottom: 2rem;">
+        <label for="categoria" style="display: block; margin-bottom: 0.5rem; color: #ffffff; font-weight: 500;">
+          Categoria *
+        </label>
+        <select 
+          id="categoria"
+          name="categoria"
+          [(ngModel)]="produto.categoria"
+          required
+          style="width: 100%; padding: 0.75rem; background: #4b5563; border: 1px solid #6b7280; border-radius: 6px; color: #ffffff; font-size: 1rem;"
+          #categoriaInput="ngModel"
+        >
+          <option value="" style="background: #4b5563; color: #9ca3af;">Selecione uma categoria</option>
+          <option *ngFor="let cat of categorias" [value]="cat.value" style="background: #4b5563; color: #ffffff;">{{ cat.label }}</option>
+        </select>
+        <small 
+          *ngIf="categoriaInput.invalid && categoriaInput.touched" 
+          style="color: #f87171; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Categoria é obrigatória
+        </small>
+      </div>
+
+      <!-- Botões -->
+      <div style="display: flex; gap: 1rem;">
+        <button 
+          type="submit"
+          [disabled]="produtoForm.invalid"
+          style="flex: 1; background: #10b981; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+          [style.background]="produtoForm.invalid ? '#6b7280' : '#10b981'"
+          [style.cursor]="produtoForm.invalid ? 'not-allowed' : 'pointer'"
+        >
+          Adicionar Produto
+        </button>
+        <button 
+          type="button"
+          (click)="produto = {name: '', quantidade: 0, categoria: ''}"
+          style="background: #6b7280; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+        >
+          Limpar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Preview do Produto -->
+  <div *ngIf="produto.name || produto.categoria" style="background: #374151; border-radius: 8px; padding: 1.5rem;">
+    <h3 style="color: #ffffff; margin-bottom: 1rem; font-size: 1.25rem;">Preview do Produto</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div>
+        <strong style="color: #d1d5db;">Nome:</strong> 
+        <span style="color: #ffffff;">{{ produto.name || 'Não informado' }}</span>
+      </div>
+      <div>
+        <strong style="color: #d1d5db;">Quantidade:</strong> 
+        <span style="color: #ffffff;">{{ produto.quantidade || 0 }} unidades</span>
+      </div>
+      <div>
+        <strong style="color: #d1d5db;">Categoria:</strong> 
+        <span style="color: #ffffff;">{{ produto.categoria || 'Não selecionada' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
