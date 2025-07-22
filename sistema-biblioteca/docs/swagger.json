@@ -1,0 +1,84 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/emprestimos": {
+            "post": {
+                "description": "Registra um novo empréstimo de livro",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emprestimos"
+                ],
+                "summary": "Criar um novo empréstimo",
+                "parameters": [
+                    {
+                        "description": "Dados do empréstimo",
+                        "name": "emprestimo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Emprestimo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Emprestimo"
+                        }
+                    }
+                }
+            }
+        },
+        "/livros": {
+            "post": {
+                "description": "Adiciona um novo livro à biblioteca",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "livros"
+                ],
+                "summary": "Criar um novo livro",
+                "parameters": [
+                    {
+                        "description": "Dados do livro",
+                        "name": "livro",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Livro"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Livro"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Emprestimo": {
+            "type": "object"
+        },
+        "models.Livro": {
+            "type": "object"
+        }
+    }
+}

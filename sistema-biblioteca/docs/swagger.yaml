@@ -1,0 +1,53 @@
+definitions:
+  models.Emprestimo:
+    type: object
+  models.Livro:
+    type: object
+info:
+  contact: {}
+paths:
+  /emprestimos:
+    post:
+      consumes:
+      - application/json
+      description: Registra um novo empréstimo de livro
+      parameters:
+      - description: Dados do empréstimo
+        in: body
+        name: emprestimo
+        required: true
+        schema:
+          $ref: '#/definitions/models.Emprestimo'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Emprestimo'
+      summary: Criar um novo empréstimo
+      tags:
+      - emprestimos
+  /livros:
+    post:
+      consumes:
+      - application/json
+      description: Adiciona um novo livro à biblioteca
+      parameters:
+      - description: Dados do livro
+        in: body
+        name: livro
+        required: true
+        schema:
+          $ref: '#/definitions/models.Livro'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Livro'
+      summary: Criar um novo livro
+      tags:
+      - livros
+swagger: "2.0"

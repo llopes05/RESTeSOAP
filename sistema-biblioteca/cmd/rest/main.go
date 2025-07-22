@@ -3,6 +3,9 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/llopes05/RESTeSOAP/internal/database"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/files"
+	_ "github.com/llopes05/RESTeSOAP/docs" 
 )
 
 func main() {
@@ -12,6 +15,8 @@ func main() {
 	}
 
 	r := gin.Default()
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	setupRoutes(r, db)
 
