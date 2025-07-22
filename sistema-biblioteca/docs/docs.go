@@ -16,6 +16,27 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/emprestimos": {
+            "get": {
+                "description": "Retorna uma lista de todos os empréstimos registrados",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emprestimos"
+                ],
+                "summary": "Listar todos os empréstimos",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.EmprestimoSwagger"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Registra um novo empréstimo de livro",
                 "consumes": [
@@ -35,7 +56,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Emprestimo"
+                            "$ref": "#/definitions/main.EmprestimoSwagger"
                         }
                     }
                 ],
@@ -43,7 +64,114 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Emprestimo"
+                            "$ref": "#/definitions/main.EmprestimoSwagger"
+                        }
+                    }
+                }
+            }
+        },
+        "/emprestimos/{id}": {
+            "get": {
+                "description": "Retorna os detalhes de um empréstimo específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emprestimos"
+                ],
+                "summary": "Obter um empréstimo por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do empréstimo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.EmprestimoSwagger"
+                        }
+                    },
+                    "404": {
+                        "description": "Empréstimo não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza os dados de um empréstimo existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "emprestimos"
+                ],
+                "summary": "Atualizar um empréstimo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do empréstimo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados do empréstimo",
+                        "name": "emprestimo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.EmprestimoSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.EmprestimoSwagger"
+                        }
+                    },
+                    "404": {
+                        "description": "Empréstimo não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um empréstimo da biblioteca",
+                "tags": [
+                    "emprestimos"
+                ],
+                "summary": "Deletar um empréstimo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do empréstimo",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Nenhum conteúdo"
+                    },
+                    "404": {
+                        "description": "Empréstimo não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
                         }
                     }
                 }
@@ -69,7 +197,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Livro"
+                            "$ref": "#/definitions/main.LivroSwagger"
                         }
                     }
                 ],
@@ -77,7 +205,114 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/models.Livro"
+                            "$ref": "#/definitions/main.LivroSwagger"
+                        }
+                    }
+                }
+            }
+        },
+        "/livros/{id}": {
+            "get": {
+                "description": "Retorna os detalhes de um livro específico",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "livros"
+                ],
+                "summary": "Obter um livro por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do livro",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.LivroSwagger"
+                        }
+                    },
+                    "404": {
+                        "description": "Livro não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Atualiza os dados de um livro existente",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "livros"
+                ],
+                "summary": "Atualizar um livro",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do livro",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Dados atualizados do livro",
+                        "name": "livro",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.LivroSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.LivroSwagger"
+                        }
+                    },
+                    "404": {
+                        "description": "Livro não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove um livro da biblioteca",
+                "tags": [
+                    "livros"
+                ],
+                "summary": "Deletar um livro",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID do livro",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Nenhum conteúdo"
+                    },
+                    "404": {
+                        "description": "Livro não encontrado",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
                         }
                     }
                 }
@@ -85,10 +320,35 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Emprestimo": {
-            "type": "object"
+        "main.EmprestimoSwagger": {
+            "type": "object",
+            "properties": {
+                "data_fim": {
+                    "type": "string"
+                },
+                "data_inicio": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "livro_id": {
+                    "type": "integer"
+                },
+                "usuario_id": {
+                    "type": "integer"
+                }
+            }
         },
-        "models.Livro": {
+        "main.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.LivroSwagger": {
             "type": "object"
         }
     }

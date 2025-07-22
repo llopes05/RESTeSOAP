@@ -1,12 +1,42 @@
 definitions:
-  models.Emprestimo:
+  main.EmprestimoSwagger:
+    properties:
+      data_fim:
+        type: string
+      data_inicio:
+        type: string
+      id:
+        type: integer
+      livro_id:
+        type: integer
+      usuario_id:
+        type: integer
     type: object
-  models.Livro:
+  main.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  main.LivroSwagger:
     type: object
 info:
   contact: {}
 paths:
   /emprestimos:
+    get:
+      description: Retorna uma lista de todos os empréstimos registrados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.EmprestimoSwagger'
+            type: array
+      summary: Listar todos os empréstimos
+      tags:
+      - emprestimos
     post:
       consumes:
       - application/json
@@ -17,15 +47,86 @@ paths:
         name: emprestimo
         required: true
         schema:
-          $ref: '#/definitions/models.Emprestimo'
+          $ref: '#/definitions/main.EmprestimoSwagger'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Emprestimo'
+            $ref: '#/definitions/main.EmprestimoSwagger'
       summary: Criar um novo empréstimo
+      tags:
+      - emprestimos
+  /emprestimos/{id}:
+    delete:
+      description: Remove um empréstimo da biblioteca
+      parameters:
+      - description: ID do empréstimo
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Nenhum conteúdo
+        "404":
+          description: Empréstimo não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Deletar um empréstimo
+      tags:
+      - emprestimos
+    get:
+      description: Retorna os detalhes de um empréstimo específico
+      parameters:
+      - description: ID do empréstimo
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.EmprestimoSwagger'
+        "404":
+          description: Empréstimo não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Obter um empréstimo por ID
+      tags:
+      - emprestimos
+    put:
+      consumes:
+      - application/json
+      description: Atualiza os dados de um empréstimo existente
+      parameters:
+      - description: ID do empréstimo
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Dados atualizados do empréstimo
+        in: body
+        name: emprestimo
+        required: true
+        schema:
+          $ref: '#/definitions/main.EmprestimoSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.EmprestimoSwagger'
+        "404":
+          description: Empréstimo não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Atualizar um empréstimo
       tags:
       - emprestimos
   /livros:
@@ -39,15 +140,86 @@ paths:
         name: livro
         required: true
         schema:
-          $ref: '#/definitions/models.Livro'
+          $ref: '#/definitions/main.LivroSwagger'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/models.Livro'
+            $ref: '#/definitions/main.LivroSwagger'
       summary: Criar um novo livro
+      tags:
+      - livros
+  /livros/{id}:
+    delete:
+      description: Remove um livro da biblioteca
+      parameters:
+      - description: ID do livro
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Nenhum conteúdo
+        "404":
+          description: Livro não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Deletar um livro
+      tags:
+      - livros
+    get:
+      description: Retorna os detalhes de um livro específico
+      parameters:
+      - description: ID do livro
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LivroSwagger'
+        "404":
+          description: Livro não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Obter um livro por ID
+      tags:
+      - livros
+    put:
+      consumes:
+      - application/json
+      description: Atualiza os dados de um livro existente
+      parameters:
+      - description: ID do livro
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Dados atualizados do livro
+        in: body
+        name: livro
+        required: true
+        schema:
+          $ref: '#/definitions/main.LivroSwagger'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.LivroSwagger'
+        "404":
+          description: Livro não encontrado
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Atualizar um livro
       tags:
       - livros
 swagger: "2.0"
