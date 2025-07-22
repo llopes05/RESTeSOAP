@@ -1,0 +1,35 @@
+# Go
+/bin/
+/build/
+/dist/
+/vendor/
+/*.exe
+/*.exe~
+/*.dll
+/*.so
+/*.dylib
+/*.test
+*.out
+*.log
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+
+# SQLite database
+*.db
+
+# Node/Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/cache/
+frontend/.env
+
+# OS files
+.DS_Store
+Thumbs.db
