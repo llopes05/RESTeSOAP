@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package biblioteca;
+
+option go_package = "github.com/llopes05/RESTeSOAP/proto";
+
+// mensagens:
+message Livro {
+  int32 id = 1;
+  string titulo = 2;
+  string autor = 3;
+  int32 ano = 4;
+  bool disponivel = 5;
+}
+
+message ListaLivrosResponse {
+  repeated Livro livros = 1;
+}
+
+message CriarLivroRequest {
+  string titulo = 1;
+  string autor = 2;
+  int32 ano = 3;
+  bool disponivel = 4;
+}
+
+message CriarLivroResponse {
+  Livro livro = 1;
+}
+
+message Emprestimo {
+  int32 id = 1;
+  int32 livro_id = 2;
+  int32 usuario_id = 3;
+  string data_inicio = 4;
+  string data_fim = 5;
+  bool devolvido = 6;
+}
+
+message CriarEmprestimoRequest {
+  int32 livro_id = 1;
+  int32 usuario_id = 2;
+  string data_inicio = 3;
+  string data_fim = 4;
+}
+
+message CriarEmprestimoResponse {
+  Emprestimo emprestimo = 1;
+}
+
+// serviço da biblioteca 
+service BibliotecaService {
+  rpc ListarLivros (google.protobuf.Empty) returns (ListaLivrosResponse);
+  rpc CriarLivro (CriarLivroRequest) returns (CriarLivroResponse);
+  rpc CriarEmprestimo (CriarEmprestimoRequest) returns (CriarEmprestimoResponse);
+}
+
+import "google/protobuf/empty.proto";
