@@ -6,19 +6,14 @@ import (
 )
 
 func main() {
-	if _, err := database.InitDB(); err != nil {
-		panic("Falha ao conectar ao banco: " + err.Error())
+	db, err := database.InitDB()
+	if err != nil {
+		panic("Falha ao conectar ao banco de dados: " + err.Error())
 	}
 
 	r := gin.Default()
-	configurarRotas(r)
-	r.Run(":8080") 
-}
 
-func configurarRotas(r *gin.Engine) {
-	r.GET("/livros", listarLivros)
-	r.POST("/livros", criarLivro)
-	r.GET("/livros/:id", buscarLivro)
-	r.PUT("/livros/:id", atualizarLivro)
-	r.DELETE("/livros/:id", deletarLivro)
+	setupRoutes(r, db)
+
+	r.Run(":8080")
 }

@@ -9,6 +9,9 @@ import (
 var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
+	if DB != nil {
+		return DB, nil 
+	}
 	db, err := gorm.Open(sqlite.Open("biblioteca.db"), &gorm.Config{})
 	if err != nil {
 		return nil, err
@@ -16,9 +19,13 @@ func InitDB() (*gorm.DB, error) {
 
 	err = db.AutoMigrate(
 		&models.Livro{},
-		&models.Usuario{},
 		&models.Emprestimo{},
+		&models.Usuario{}, 
 	)
+	if err != nil {
+		return nil, err
+	}
+
 	DB = db
-	return db, err
+	return DB, nil
 }
