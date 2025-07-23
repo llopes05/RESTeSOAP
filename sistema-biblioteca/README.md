@@ -59,3 +59,24 @@ Teste o cliente gRPC:
 ```bash
 go run cmd/grpc/client.go
 ```
+
+## Docker
+
+Para rodar o backend (REST/gRPC) em container Docker:
+
+### Build da imagem
+```bash
+docker build -t biblioteca-app .
+```
+
+### Rodar o servidor REST (porta 8080)
+```bash
+docker run -p 8080:8080 biblioteca-app
+```
+
+### Rodar o servidor gRPC (porta 50051)
+```bash
+docker run -p 50051:50051 biblioteca-app /app/biblioteca-grpc
+```
+
+> Obs: Certifique-se de que as portas desejadas estejam livres no seu sistema antes de rodar o container.
