@@ -1,0 +1,130 @@
+<app-navbar></app-navbar>
+
+<div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+  <h1 style="margin-bottom: 0.5rem; font-size: 2rem;">📚 Adicionar Livro</h1>
+  <p style="color: #6b7280; margin-bottom: 2rem;">Preencha as informações abaixo para adicionar um novo livro à biblioteca.</p>
+  
+  <div *ngIf="mensagem" 
+       [style.background]="sucesso ? '#dcfce7' : '#fef2f2'"
+       [style.color]="sucesso ? '#166534' : '#dc2626'"
+       [style.border]="sucesso ? '1px solid #bbf7d0' : '1px solid #fecaca'"
+       style="padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+    {{ mensagem }}
+  </div>
+  
+  <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <form (ngSubmit)="adicionarLivro()" #livroForm="ngForm">
+      <div style="margin-bottom: 1.5rem;">
+        <label for="titulo" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Título do Livro *
+        </label>
+        <input 
+          type="text" 
+          id="titulo"
+          name="titulo"
+          [(ngModel)]="livro.titulo"
+          required
+          placeholder="Digite o título do livro"
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #tituloInput="ngModel"
+        />
+        <small 
+          *ngIf="tituloInput.invalid && tituloInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Título do livro é obrigatório
+        </small>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label for="autor" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Autor *
+        </label>
+        <input 
+          type="text" 
+          id="autor"
+          name="autor"
+          [(ngModel)]="livro.autor"
+          required
+          placeholder="Digite o nome do autor"
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #autorInput="ngModel"
+        />
+        <small 
+          *ngIf="autorInput.invalid && autorInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Nome do autor é obrigatório
+        </small>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label for="ano" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Ano de Publicação *
+        </label>
+        <input 
+          type="number" 
+          id="ano"
+          name="ano"
+          [(ngModel)]="livro.ano"
+          required
+          min="1000"
+          max="2030"
+          placeholder="2024"
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #anoInput="ngModel"
+        />
+        <small 
+          *ngIf="anoInput.invalid && anoInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Ano de publicação é obrigatório
+        </small>
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button 
+          type="submit"
+          [disabled]="livroForm.invalid || loading"
+          style="flex: 1; background: #3b82f6; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+          [style.background]="livroForm.invalid || loading ? '#9ca3af' : '#3b82f6'"
+          [style.cursor]="livroForm.invalid || loading ? 'not-allowed' : 'pointer'"
+        >
+          <span *ngIf="!loading">📚 Adicionar Livro</span>
+          <span *ngIf="loading">⏳ Adicionando...</span>
+        </button>
+        <button 
+          type="button"
+          (click)="limparFormulario()" [disabled]="loading"
+          style="background: #6b7280; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+          [style.cursor]="loading ? 'not-allowed' : 'pointer'"
+        >
+          🗑️ Limpar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="livro.titulo || livro.autor" style="background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1.5rem; margin-top: 2rem;">
+    <h3 style="margin-bottom: 1rem; font-size: 1.25rem; color: #374151;">📖 Preview do Livro</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+      <div>
+        <strong style="color: #6b7280;">Título:</strong> 
+        <span style="color: #111827;">{{ livro.titulo || 'Não informado' }}</span>
+      </div>
+      <div>
+        <strong style="color: #6b7280;">Autor:</strong> 
+        <span style="color: #111827;">{{ livro.autor || 'Não informado' }}</span>
+      </div>
+      <div>
+        <strong style="color: #6b7280;">Ano:</strong> 
+        <span style="color: #111827;">{{ livro.ano }}</span>
+      </div>
+      <div>
+        <strong style="color: #6b7280;">Status:</strong> 
+        <span style="color: #059669; font-weight: 500;">{{ livro.disponivel ? 'Disponível' : 'Indisponível' }}</span>
+      </div>
+    </div>
+  </div>
+</div>
