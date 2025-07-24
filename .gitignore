@@ -22,6 +22,7 @@ go.work.sum
 *.swp
 
 # SQLite database
+*.db
 
 
 # Node/Angular
