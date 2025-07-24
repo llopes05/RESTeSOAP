@@ -17,4 +17,10 @@ func setupRoutes(r *gin.Engine, db *gorm.DB) {
 	r.GET("/emprestimos/:id", func(c *gin.Context) { obterEmprestimo(c, db) })
 	r.PUT("/emprestimos/:id", func(c *gin.Context) { atualizarEmprestimo(c, db) })
 	r.DELETE("/emprestimos/:id", func(c *gin.Context) { deletarEmprestimo(c, db) })
+
+	r.GET("/usuarios", func(c *gin.Context) { listarUsuarios(c, db) })
+	r.POST("/usuarios", func(c *gin.Context) { criarUsuario(c, db) })
+	r.GET("/usuarios/:id", func(c *gin.Context) { obterUsuario(c, db) })
+	r.PUT("/usuarios/:id", func(c *gin.Context) { atualizarUsuario(c, db) })
+	r.DELETE("/usuarios/:id", func(c *gin.Context) { deletarUsuario(c, db) })
 }

@@ -35,6 +35,17 @@ type EmprestimoSwagger struct {
 	DataFim    string `json:"data_fim"`
 }
 
+// UsuarioSwagger representa um usuário para documentação Swagger
+// swagger:model
+// Utilize este tipo nos comentários Swagger para evitar erro com gorm.Model
+// Adapte os campos conforme o modelo real
+//
+type UsuarioSwagger struct {
+	ID    uint   `json:"id"`
+	Nome  string `json:"nome"`
+	Email string `json:"email"`
+}
+
 // @title Biblioteca API
 // @version 1.0
 // @description API para gerenciar livros e empréstimos de uma biblioteca
@@ -311,6 +322,133 @@ func deletarEmprestimo(c *gin.Context, db *gorm.DB) {
 	}
 	if err := db.Delete(&emprestimo).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao deletar empréstimo"})
+		return
+	}
+	c.JSON(http.StatusNoContent, nil)
+}
+
+// @Summary Listar todos os usuários
+// @Description Retorna uma lista de todos os usuários cadastrados
+// @Tags usuarios
+// @Produce json
+// @Success 200 {array} UsuarioSwagger
+// @Router /usuarios [get]
+func listarUsuarios(c *gin.Context, db *gorm.DB) {
+	var usuarios []models.Usuario
+	if err := db.Find(&usuarios).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao listar usuários"})
+		return
+	}
+	c.JSON(http.StatusOK, usuarios)
+}
+
+// @Summary Criar um novo usuário
+// @Description Adiciona um novo usuário ao sistema
+// @Tags usuarios
+// @Accept json
+// @Produce json
+// @Param usuario body UsuarioSwagger true "Dados do usuário"
+// @Success 201 {object} UsuarioSwagger
+// @Router /usuarios [post]
+func criarUsuario(c *gin.Context, db *gorm.DB) {
+	var usuario models.Usuario
+	if err := c.ShouldBindJSON(&usuario); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+	if err := db.Create(&usuario).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao criar usuário"})
+		return
+	}
+	c.JSON(http.StatusCreated, usuario)
+}
+
+// @Summary Obter um usuário por ID
+// @Description Retorna os detalhes de um usuário específico
+// @Tags usuarios
+// @Produce json
+// @Param id path int true "ID do usuário"
+// @Success 200 {object} UsuarioSwagger
+// @Failure 404 {object} ErrorResponse "Usuário não encontrado"
+// @Router /usuarios/{id} [get]
+func obterUsuario(c *gin.Context, db *gorm.DB) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+	var usuario models.Usuario
+	if err := db.First(&usuario, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, ErrorResponse{"Usuário não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar usuário"})
+		return
+	}
+	c.JSON(http.StatusOK, usuario)
+}
+
+// @Summary Atualizar um usuário
+// @Description Atualiza os dados de um usuário existente
+// @Tags usuarios
+// @Accept json
+// @Produce json
+// @Param id path int true "ID do usuário"
+// @Param usuario body UsuarioSwagger true "Dados atualizados do usuário"
+// @Success 200 {object} UsuarioSwagger
+// @Failure 404 {object} ErrorResponse "Usuário não encontrado"
+// @Router /usuarios/{id} [put]
+func atualizarUsuario(c *gin.Context, db *gorm.DB) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+	var usuario models.Usuario
+	if err := db.First(&usuario, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, ErrorResponse{"Usuário não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar usuário"})
+		return
+	}
+	if err := c.ShouldBindJSON(&usuario); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+		return
+	}
+	if err := db.Save(&usuario).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao atualizar usuário"})
+		return
+	}
+	c.JSON(http.StatusOK, usuario)
+}
+
+// @Summary Deletar um usuário
+// @Description Remove um usuário do sistema
+// @Tags usuarios
+// @Param id path int true "ID do usuário"
+// @Success 204 "Nenhum conteúdo"
+// @Failure 404 {object} ErrorResponse "Usuário não encontrado"
+// @Router /usuarios/{id} [delete]
+func deletarUsuario(c *gin.Context, db *gorm.DB) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ID inválido"})
+		return
+	}
+	var usuario models.Usuario
+	if err := db.First(&usuario, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, ErrorResponse{"Usuário não encontrado"})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao buscar usuário"})
+		return
+	}
+	if err := db.Delete(&usuario).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao deletar usuário"})
 		return
 	}
 	c.JSON(http.StatusNoContent, nil)
