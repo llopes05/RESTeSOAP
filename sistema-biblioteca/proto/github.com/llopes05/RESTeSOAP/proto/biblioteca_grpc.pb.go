@@ -23,17 +23,20 @@ const (
 	BibliotecaService_ListarLivros_FullMethodName    = "/biblioteca.BibliotecaService/ListarLivros"
 	BibliotecaService_CriarLivro_FullMethodName      = "/biblioteca.BibliotecaService/CriarLivro"
 	BibliotecaService_CriarEmprestimo_FullMethodName = "/biblioteca.BibliotecaService/CriarEmprestimo"
+	BibliotecaService_DeletarLivro_FullMethodName    = "/biblioteca.BibliotecaService/DeletarLivro"
 )
 
 // BibliotecaServiceClient is the client API for BibliotecaService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// serviço da biblioteca
+// --- Serviço da biblioteca ---
 type BibliotecaServiceClient interface {
 	ListarLivros(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListaLivrosResponse, error)
 	CriarLivro(ctx context.Context, in *CriarLivroRequest, opts ...grpc.CallOption) (*CriarLivroResponse, error)
 	CriarEmprestimo(ctx context.Context, in *CriarEmprestimoRequest, opts ...grpc.CallOption) (*CriarEmprestimoResponse, error)
+	// RPC FALTANTE
+	DeletarLivro(ctx context.Context, in *DeletarLivroRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type bibliotecaServiceClient struct {
@@ -74,15 +77,27 @@ func (c *bibliotecaServiceClient) CriarEmprestimo(ctx context.Context, in *Criar
 	return out, nil
 }
 
+func (c *bibliotecaServiceClient) DeletarLivro(ctx context.Context, in *DeletarLivroRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, BibliotecaService_DeletarLivro_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BibliotecaServiceServer is the server API for BibliotecaService service.
 // All implementations must embed UnimplementedBibliotecaServiceServer
 // for forward compatibility.
 //
-// serviço da biblioteca
+// --- Serviço da biblioteca ---
 type BibliotecaServiceServer interface {
 	ListarLivros(context.Context, *emptypb.Empty) (*ListaLivrosResponse, error)
 	CriarLivro(context.Context, *CriarLivroRequest) (*CriarLivroResponse, error)
 	CriarEmprestimo(context.Context, *CriarEmprestimoRequest) (*CriarEmprestimoResponse, error)
+	// RPC FALTANTE
+	DeletarLivro(context.Context, *DeletarLivroRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedBibliotecaServiceServer()
 }
 
@@ -101,6 +116,9 @@ func (UnimplementedBibliotecaServiceServer) CriarLivro(context.Context, *CriarLi
 }
 func (UnimplementedBibliotecaServiceServer) CriarEmprestimo(context.Context, *CriarEmprestimoRequest) (*CriarEmprestimoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CriarEmprestimo not implemented")
+}
+func (UnimplementedBibliotecaServiceServer) DeletarLivro(context.Context, *DeletarLivroRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeletarLivro not implemented")
 }
 func (UnimplementedBibliotecaServiceServer) mustEmbedUnimplementedBibliotecaServiceServer() {}
 func (UnimplementedBibliotecaServiceServer) testEmbeddedByValue()                           {}
@@ -177,6 +195,24 @@ func _BibliotecaService_CriarEmprestimo_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BibliotecaService_DeletarLivro_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletarLivroRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BibliotecaServiceServer).DeletarLivro(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BibliotecaService_DeletarLivro_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BibliotecaServiceServer).DeletarLivro(ctx, req.(*DeletarLivroRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BibliotecaService_ServiceDesc is the grpc.ServiceDesc for BibliotecaService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -195,6 +231,10 @@ var BibliotecaService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CriarEmprestimo",
 			Handler:    _BibliotecaService_CriarEmprestimo_Handler,
+		},
+		{
+			MethodName: "DeletarLivro",
+			Handler:    _BibliotecaService_DeletarLivro_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

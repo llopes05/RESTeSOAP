@@ -2,9 +2,11 @@ syntax = "proto3";
 
 package biblioteca;
 
+import "google/protobuf/empty.proto"; // Mova o import para o topo
+
 option go_package = "github.com/llopes05/RESTeSOAP/proto";
 
-// mensagens:
+// --- Mensagens ---
 message Livro {
   int32 id = 1;
   string titulo = 2;
@@ -48,11 +50,18 @@ message CriarEmprestimoResponse {
   Emprestimo emprestimo = 1;
 }
 
-// serviço da biblioteca 
+// MENSAGEM FALTANTE
+message DeletarLivroRequest {
+  int32 id = 1;
+}
+
+
+// --- Serviço da biblioteca ---
 service BibliotecaService {
   rpc ListarLivros (google.protobuf.Empty) returns (ListaLivrosResponse);
   rpc CriarLivro (CriarLivroRequest) returns (CriarLivroResponse);
   rpc CriarEmprestimo (CriarEmprestimoRequest) returns (CriarEmprestimoResponse);
-}
 
-import "google/protobuf/empty.proto";
+  // RPC FALTANTE
+  rpc DeletarLivro (DeletarLivroRequest) returns (google.protobuf.Empty);
+}

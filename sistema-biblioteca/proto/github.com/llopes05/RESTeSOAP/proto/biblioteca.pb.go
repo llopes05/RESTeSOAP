@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// mensagens:
+// --- Mensagens ---
 type Livro struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -451,6 +451,51 @@ func (x *CriarEmprestimoResponse) GetEmprestimo() *Emprestimo {
 	return nil
 }
 
+// MENSAGEM FALTANTE
+type DeletarLivroRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletarLivroRequest) Reset() {
+	*x = DeletarLivroRequest{}
+	mi := &file_proto_biblioteca_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletarLivroRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletarLivroRequest) ProtoMessage() {}
+
+func (x *DeletarLivroRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_biblioteca_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletarLivroRequest.ProtoReflect.Descriptor instead.
+func (*DeletarLivroRequest) Descriptor() ([]byte, []int) {
+	return file_proto_biblioteca_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DeletarLivroRequest) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
 var File_proto_biblioteca_proto protoreflect.FileDescriptor
 
 const file_proto_biblioteca_proto_rawDesc = "" +
@@ -496,12 +541,15 @@ const file_proto_biblioteca_proto_rawDesc = "" +
 	"\x17CriarEmprestimoResponse\x126\n" +
 	"\n" +
 	"emprestimo\x18\x01 \x01(\v2\x16.biblioteca.EmprestimoR\n" +
-	"emprestimo2\x85\x02\n" +
+	"emprestimo\"%\n" +
+	"\x13DeletarLivroRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x05R\x02id2\xce\x02\n" +
 	"\x11BibliotecaService\x12G\n" +
 	"\fListarLivros\x12\x16.google.protobuf.Empty\x1a\x1f.biblioteca.ListaLivrosResponse\x12K\n" +
 	"\n" +
 	"CriarLivro\x12\x1d.biblioteca.CriarLivroRequest\x1a\x1e.biblioteca.CriarLivroResponse\x12Z\n" +
-	"\x0fCriarEmprestimo\x12\".biblioteca.CriarEmprestimoRequest\x1a#.biblioteca.CriarEmprestimoResponseB%Z#github.com/llopes05/RESTeSOAP/protob\x06proto3"
+	"\x0fCriarEmprestimo\x12\".biblioteca.CriarEmprestimoRequest\x1a#.biblioteca.CriarEmprestimoResponse\x12G\n" +
+	"\fDeletarLivro\x12\x1f.biblioteca.DeletarLivroRequest\x1a\x16.google.protobuf.EmptyB%Z#github.com/llopes05/RESTeSOAP/protob\x06proto3"
 
 var (
 	file_proto_biblioteca_proto_rawDescOnce sync.Once
@@ -515,7 +563,7 @@ func file_proto_biblioteca_proto_rawDescGZIP() []byte {
 	return file_proto_biblioteca_proto_rawDescData
 }
 
-var file_proto_biblioteca_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_biblioteca_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_biblioteca_proto_goTypes = []any{
 	(*Livro)(nil),                   // 0: biblioteca.Livro
 	(*ListaLivrosResponse)(nil),     // 1: biblioteca.ListaLivrosResponse
@@ -524,20 +572,23 @@ var file_proto_biblioteca_proto_goTypes = []any{
 	(*Emprestimo)(nil),              // 4: biblioteca.Emprestimo
 	(*CriarEmprestimoRequest)(nil),  // 5: biblioteca.CriarEmprestimoRequest
 	(*CriarEmprestimoResponse)(nil), // 6: biblioteca.CriarEmprestimoResponse
-	(*emptypb.Empty)(nil),           // 7: google.protobuf.Empty
+	(*DeletarLivroRequest)(nil),     // 7: biblioteca.DeletarLivroRequest
+	(*emptypb.Empty)(nil),           // 8: google.protobuf.Empty
 }
 var file_proto_biblioteca_proto_depIdxs = []int32{
 	0, // 0: biblioteca.ListaLivrosResponse.livros:type_name -> biblioteca.Livro
 	0, // 1: biblioteca.CriarLivroResponse.livro:type_name -> biblioteca.Livro
 	4, // 2: biblioteca.CriarEmprestimoResponse.emprestimo:type_name -> biblioteca.Emprestimo
-	7, // 3: biblioteca.BibliotecaService.ListarLivros:input_type -> google.protobuf.Empty
+	8, // 3: biblioteca.BibliotecaService.ListarLivros:input_type -> google.protobuf.Empty
 	2, // 4: biblioteca.BibliotecaService.CriarLivro:input_type -> biblioteca.CriarLivroRequest
 	5, // 5: biblioteca.BibliotecaService.CriarEmprestimo:input_type -> biblioteca.CriarEmprestimoRequest
-	1, // 6: biblioteca.BibliotecaService.ListarLivros:output_type -> biblioteca.ListaLivrosResponse
-	3, // 7: biblioteca.BibliotecaService.CriarLivro:output_type -> biblioteca.CriarLivroResponse
-	6, // 8: biblioteca.BibliotecaService.CriarEmprestimo:output_type -> biblioteca.CriarEmprestimoResponse
-	6, // [6:9] is the sub-list for method output_type
-	3, // [3:6] is the sub-list for method input_type
+	7, // 6: biblioteca.BibliotecaService.DeletarLivro:input_type -> biblioteca.DeletarLivroRequest
+	1, // 7: biblioteca.BibliotecaService.ListarLivros:output_type -> biblioteca.ListaLivrosResponse
+	3, // 8: biblioteca.BibliotecaService.CriarLivro:output_type -> biblioteca.CriarLivroResponse
+	6, // 9: biblioteca.BibliotecaService.CriarEmprestimo:output_type -> biblioteca.CriarEmprestimoResponse
+	8, // 10: biblioteca.BibliotecaService.DeletarLivro:output_type -> google.protobuf.Empty
+	7, // [7:11] is the sub-list for method output_type
+	3, // [3:7] is the sub-list for method input_type
 	3, // [3:3] is the sub-list for extension type_name
 	3, // [3:3] is the sub-list for extension extendee
 	0, // [0:3] is the sub-list for field type_name
@@ -554,7 +605,7 @@ func file_proto_biblioteca_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_biblioteca_proto_rawDesc), len(file_proto_biblioteca_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
