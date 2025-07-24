@@ -34,7 +34,7 @@ def livros_view(request):
         elif request.method == 'POST':
             # Fazer requisição POST para o backend Go
             response = requests.post(
-                f'{GO_BACKEND_URL}/livros',
+                f'{GO_BACKEND_URL}/livros/',
                 json=request.data,
                 headers={'Content-Type': 'application/json'}
             )
@@ -43,7 +43,7 @@ def livros_view(request):
                 try:
                     data = response.json()
                 except ValueError:
-                    data = request.data  # ou um dicionário com mensagem de sucesso
+                    data = request.data  
                 return Response(data, status=status.HTTP_201_CREATED)
             else:
                 return Response(

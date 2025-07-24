@@ -47,11 +47,6 @@ export class CriarEmprestimo {
       },
       error: (error) => {
         console.error('Erro ao carregar livros:', error);
-        // Dados de exemplo para teste
-        this.livros = [
-          { ID: 1, titulo: 'Dom Casmurro', autor: 'Machado de Assis', disponivel: true },
-          { ID: 3, titulo: '1984', autor: 'George Orwell', disponivel: true }
-        ];
       }
     });
   }
@@ -63,11 +58,6 @@ export class CriarEmprestimo {
       },
       error: (error) => {
         console.error('Erro ao carregar usuários:', error);
-        // Dados de exemplo para teste
-        this.usuarios = [
-          { ID: 1, nome: 'João Silva', email: 'joao@email.com' },
-          { ID: 2, nome: 'Maria Santos', email: 'maria@email.com' }
-        ];
       }
     });
   }
@@ -86,7 +76,7 @@ export class CriarEmprestimo {
     this.loading = true;
     this.mensagem = '';
 
-    this.http.post(`${this.gatewayUrl}/emprestimos`, this.emprestimo).subscribe({
+    this.http.post(`${this.gatewayUrl}/emprestimos/`, this.emprestimo).subscribe({
       next: (response: any) => {
         console.log('Empréstimo criado:', response);
         this.sucesso = true;

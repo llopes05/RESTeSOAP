@@ -39,7 +39,7 @@ export class Home {
     { label: 'Usuários', value: 'usuarios', icon: 'pi pi-users' },
     { label: 'Empréstimos', value: 'emprestimos', icon: 'pi pi-calendar' }
   ];
-  
+
   selectedView = 'livros';
   loading = false;
 
@@ -63,26 +63,6 @@ export class Home {
     }
   }
 
-  carregarLivros() {
-    this.loading = true;
-    this.http.get(`${this.gatewayUrl}/livros`).subscribe({
-      next: (data: any) => {
-        this.livros = data;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar livros:', error);
-        this.loading = false;
-        // Dados de exemplo para teste
-        this.livros = [
-          { ID: 1, titulo: 'Dom Casmurro', autor: 'Machado de Assis', ano: 1899, disponivel: true },
-          { ID: 2, titulo: 'O Cortiço', autor: 'Aluísio Azevedo', ano: 1890, disponivel: false },
-          { ID: 3, titulo: '1984', autor: 'George Orwell', ano: 1949, disponivel: true }
-        ];
-      }
-    });
-  }
-
   carregarUsuarios() {
     this.loading = true;
     this.http.get(`${this.gatewayUrl}/usuarios`).subscribe({
@@ -93,15 +73,25 @@ export class Home {
       error: (error) => {
         console.error('Erro ao carregar usuários:', error);
         this.loading = false;
-        // Dados de exemplo para teste
-        this.usuarios = [
-          { ID: 1, nome: 'João Silva', email: 'joao@email.com' },
-          { ID: 2, nome: 'Maria Santos', email: 'maria@email.com' },
-          { ID: 3, nome: 'Pedro Oliveira', email: 'pedro@email.com' }
-        ];
       }
     });
   }
+
+  carregarLivros() {
+    this.loading = true;
+    this.http.get(`${this.gatewayUrl}/livros`).subscribe({
+      next: (data: any) => {
+        this.livros = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar livros:', error);
+        this.loading = false;
+      }
+    });
+  }
+
+
 
   carregarEmprestimos() {
     this.loading = true;
@@ -113,25 +103,6 @@ export class Home {
       error: (error) => {
         console.error('Erro ao carregar empréstimos:', error);
         this.loading = false;
-        // Dados de exemplo para teste
-        this.emprestimos = [
-          { 
-            ID: 1, 
-            livro: { titulo: 'Dom Casmurro' }, 
-            usuario: { nome: 'João Silva' },
-            data_inicio: '2025-01-15T00:00:00Z',
-            data_fim: '2025-01-29T00:00:00Z',
-            devolvido: false
-          },
-          { 
-            ID: 2, 
-            livro: { titulo: 'O Cortiço' }, 
-            usuario: { nome: 'Maria Santos' },
-            data_inicio: '2025-01-10T00:00:00Z',
-            data_fim: '2025-01-24T00:00:00Z',
-            devolvido: true
-          }
-        ];
       }
     });
   }

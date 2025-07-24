@@ -98,7 +98,7 @@
                 </div>
             </th>
         </tr>
-        
+
         <!-- Usuários -->
         <tr *ngIf="selectedView === 'usuarios'">
             <th pSortableColumn="ID" style="width:15%">
@@ -120,7 +120,7 @@
                 </div>
             </th>
         </tr>
-        
+
         <!-- Empréstimos -->
         <tr *ngIf="selectedView === 'emprestimos'">
             <th pSortableColumn="ID" style="width:10%">
@@ -166,14 +166,14 @@
                 </p-tag>
             </td>
         </tr>
-        
+
         <!-- Usuários -->
         <tr *ngIf="selectedView === 'usuarios'">
             <td>{{ item.ID }}</td>
             <td>{{ item.nome }}</td>
             <td>{{ item.email }}</td>
         </tr>
-        
+
         <!-- Empréstimos -->
         <tr *ngIf="selectedView === 'emprestimos'">
             <td>{{ item.ID }}</td>

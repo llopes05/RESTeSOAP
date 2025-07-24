@@ -63,7 +63,7 @@ export class AdicionarLivro {
       this.loading = true;
       this.mensagem = '';
       
-      this.http.post(`${this.gatewayUrl}/livros`, this.livro).subscribe({
+      this.http.post(`${this.gatewayUrl}/livros/`, this.livro).subscribe({
         next: (response: any) => {
           console.log('Livro adicionado:', response);
           this.sucesso = true;
