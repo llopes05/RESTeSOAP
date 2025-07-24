@@ -31,9 +31,9 @@ func main() {
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	r2, err := c.CriarLivro(ctx, &pb.CriarLivroRequest{
-		Titulo:    "Laranja mecânica",
-		Autor:     "Anthony Burgess",
-		Ano:       1962,
+		Titulo:    "Naruto",
+		Autor:     "Masashi Kishimoto",
+		Ano:       1999,
 		Disponivel: true,
 	})
 	if err != nil {
@@ -44,7 +44,7 @@ func main() {
 	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 	emprestimoResp, err := c.CriarEmprestimo(ctx, &pb.CriarEmprestimoRequest{
-		LivroId:    5,
+		LivroId:    2,
 		UsuarioId:  1,
 		DataInicio: "2025-07-22",
 		DataFim:    "2025-07-29",
@@ -53,4 +53,13 @@ func main() {
 		log.Fatalf("Erro ao criar empréstimo: %v", err)
 	}
 	log.Println("Empréstimo criado:", emprestimoResp.Emprestimo)
+
+	ctx, cancel = context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	_, err = c.DeletarLivro(ctx, &pb.DeletarLivroRequest{Id: 1})
+	if err != nil {
+		log.Fatalf("Erro ao deletar livro: %v", err)
+	}
+	log.Println("Livro deletado com sucesso!")
 }
+

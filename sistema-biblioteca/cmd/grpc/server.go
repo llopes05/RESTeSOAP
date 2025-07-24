@@ -78,6 +78,13 @@ func (s *server) CriarEmprestimo(ctx context.Context, req *pb.CriarEmprestimoReq
     return &pb.CriarEmprestimoResponse{Emprestimo: emprestimo}, nil
 }
 
+func (s *server) DeletarLivro(ctx context.Context, req *pb.DeletarLivroRequest) (*emptypb.Empty, error) {
+	if err := s.db.Exec("DELETE FROM livros WHERE id = ?", req.Id).Error; err != nil {
+		return nil, err
+	}
+	return &emptypb.Empty{}, nil
+}
+
 func main() {
 	db, err := database.InitDB()
 	if err != nil {
