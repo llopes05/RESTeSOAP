@@ -18,15 +18,14 @@ export class Navbar {
       routerLink: ['/']
     },
     {
-      label: 'Criar pedido',
-      icon: 'pi pi-truck',
-      routerLink: ['/criar-pedido']
+      label: 'Adicionar Livro',
+      icon: 'pi pi-book',
+      routerLink: ['/adicionar-livro']
     },
     {
-      label: 'Adicionar produto',
-      icon: 'pi pi-plus',
-      routerLink: ['/adicionar-produto']
+      label: 'Criar Empréstimo',
+      icon: 'pi pi-calendar',
+      routerLink: ['/criar-emprestimo']
     }
-    
   ];
 }

@@ -1,0 +1,135 @@
+<app-navbar></app-navbar>
+
+<div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+  <h1 style="margin-bottom: 0.5rem; font-size: 2rem;">📅 Criar Empréstimo</h1>
+  <p style="color: #6b7280; margin-bottom: 2rem;">Preencha as informações abaixo para criar um novo empréstimo.</p>
+  
+  <!-- Mensagem de feedback -->
+  <div *ngIf="mensagem" 
+       [style.background]="sucesso ? '#dcfce7' : '#fef2f2'"
+       [style.color]="sucesso ? '#166534' : '#dc2626'"
+       [style.border]="sucesso ? '1px solid #bbf7d0' : '1px solid #fecaca'"
+       style="padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem;">
+    {{ mensagem }}
+  </div>
+  
+  <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+    <form (ngSubmit)="criarEmprestimo()" #emprestimoForm="ngForm">
+      <!-- Selecionar Livro -->
+      <div style="margin-bottom: 1.5rem;">
+        <label for="livro" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Livro *
+        </label>
+        <select 
+          id="livro"
+          name="livro"
+          [(ngModel)]="emprestimo.livro_id"
+          required
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #livroInput="ngModel"
+        >
+          <option value="">Selecione um livro disponível</option>
+          <option *ngFor="let livro of livros" [value]="livro.ID">
+            {{ livro.titulo }} - {{ livro.autor }} ({{ livro.ano }})
+          </option>
+        </select>
+        <small 
+          *ngIf="livroInput.invalid && livroInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Seleção de livro é obrigatória
+        </small>
+      </div>
+
+      <!-- Selecionar Usuário -->
+      <div style="margin-bottom: 1.5rem;">
+        <label for="usuario" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Usuário *
+        </label>
+        <select 
+          id="usuario"
+          name="usuario"
+          [(ngModel)]="emprestimo.usuario_id"
+          required
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #usuarioInput="ngModel"
+        >
+          <option value="">Selecione um usuário</option>
+          <option *ngFor="let usuario of usuarios" [value]="usuario.ID">
+            {{ usuario.nome }} - {{ usuario.email }}
+          </option>
+        </select>
+        <small 
+          *ngIf="usuarioInput.invalid && usuarioInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Seleção de usuário é obrigatória
+        </small>
+      </div>
+
+      <!-- Data de Devolução -->
+      <div style="margin-bottom: 1.5rem;">
+        <label for="data_fim" style="display: block; margin-bottom: 0.5rem; color: #374151; font-weight: 500;">
+          Data de Devolução *
+        </label>
+        <input 
+          type="date" 
+          id="data_fim"
+          name="data_fim"
+          [(ngModel)]="emprestimo.data_fim"
+          required
+          style="width: 100%; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem;"
+          #dataInput="ngModel"
+        />
+        <small 
+          *ngIf="dataInput.invalid && dataInput.touched" 
+          style="color: #dc2626; margin-top: 0.25rem; display: block; font-size: 0.875rem;"
+        >
+          Data de devolução é obrigatória
+        </small>
+      </div>
+
+      <!-- Botões -->
+      <div style="display: flex; gap: 1rem;">
+        <button 
+          type="submit"
+          [disabled]="emprestimoForm.invalid || loading"
+          style="flex: 1; background: #059669; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+          [style.background]="emprestimoForm.invalid || loading ? '#9ca3af' : '#059669'"
+          [style.cursor]="emprestimoForm.invalid || loading ? 'not-allowed' : 'pointer'"
+        >
+          <span *ngIf="!loading">📅 Criar Empréstimo</span>
+          <span *ngIf="loading">⏳ Criando...</span>
+        </button>
+        <button 
+          type="button"
+          (click)="emprestimo = {livro_id: '', usuario_id: '', data_fim: ''}; definirDataPadrao()"
+          [disabled]="loading"
+          style="background: #6b7280; color: #ffffff; padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 500;"
+          [style.cursor]="loading ? 'not-allowed' : 'pointer'"
+        >
+          🗑️ Limpar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Informações dos Livros Disponíveis -->
+  <div style="margin-top: 2rem;">
+    <h3 style="margin-bottom: 1rem; font-size: 1.25rem; color: #374151;">📚 Livros Disponíveis</h3>
+    <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 1rem;">
+      <div *ngIf="livros.length === 0" style="text-align: center; color: #6b7280; padding: 2rem;">
+        Nenhum livro disponível no momento
+      </div>
+      <div *ngFor="let livro of livros" style="padding: 0.75rem; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: between; align-items: center;">
+        <div>
+          <strong style="color: #374151;">{{ livro.titulo }}</strong>
+          <span style="color: #6b7280; margin-left: 0.5rem;">por {{ livro.autor }} ({{ livro.ano }})</span>
+        </div>
+        <span style="background: #dcfce7; color: #166534; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.875rem; font-weight: 500;">
+          Disponível
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

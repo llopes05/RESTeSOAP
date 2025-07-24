@@ -3,10 +3,10 @@
 <app-navbar></app-navbar>
 
 <div style="padding: 2rem;">
-  <h1>Bem-vindo ao Centro Logístico</h1>
+  <h1>Sistema de Biblioteca</h1>
   
   <div style="margin: 2rem 0;">
-    <h3 style="margin-bottom: 1rem;">Visualizar dados de:</h3>
+    <h3 style="margin-bottom: 1rem;">Visualizar:</h3>
     <p-selectButton 
       [options]="viewOptions" 
       [(ngModel)]="selectedView" 
@@ -18,6 +18,30 @@
       </ng-template>
     </p-selectButton>
   </div>
+
+  <div style="margin-bottom: 1rem;">
+    <p-button 
+      *ngIf="selectedView === 'livros'" 
+      label="Carregar Livros" 
+      icon="pi pi-refresh" 
+      (onClick)="carregarLivros()"
+      [loading]="loading">
+    </p-button>
+    <p-button 
+      *ngIf="selectedView === 'usuarios'" 
+      label="Carregar Usuários" 
+      icon="pi pi-refresh" 
+      (onClick)="carregarUsuarios()"
+      [loading]="loading">
+    </p-button>
+    <p-button 
+      *ngIf="selectedView === 'emprestimos'" 
+      label="Carregar Empréstimos" 
+      icon="pi pi-refresh" 
+      (onClick)="carregarEmprestimos()"
+      [loading]="loading">
+    </p-button>
+  </div>
   
   <p-table
     #dt
@@ -25,81 +49,145 @@
     [rows]="10"
     [rowsPerPageOptions]="[5, 10, 25, 50]"
     [paginator]="true"
-    [globalFilterFields]="['name', 'categoria']"
+    [globalFilterFields]="['titulo', 'autor', 'nome', 'email']"
     showGridlines
     [tableStyle]="{ 'min-width': '60rem' }">
     
     <ng-template #caption>
-        <div class="flex" *ngIf="selectedView === 'estoque'">
+        <div class="flex">
             <p-iconfield iconPosition="left" class="ml-auto">
                 <p-inputicon>
                     <i class="pi pi-search"></i>
                 </p-inputicon>
-                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Pesquisar produtos..." />
+                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Pesquisar..." />
             </p-iconfield>
         </div>
     </ng-template>
     
     <ng-template #header>
-            <tr *ngIf="selectedView === 'estoque'"> <!-- estoque -->
-                <th pSortableColumn="id" style="width:20%">
-                    <div class="flex items-center gap-2">
-                        ID
-                        <p-sortIcon field="id" />
-                    </div>
-                </th>
-                <th pSortableColumn="name" style="width:30%">
-                    <div class="flex items-center gap-2">
-                        Name
-                        <p-sortIcon field="name" />
-                    </div>
-                </th>
-                <th pSortableColumn="categoria" style="width:25%">
-                    <div class="flex items-center gap-2">
-                        Categoria
-                        <p-sortIcon field="categoria" />
-                    </div>
-                </th>
-                <th pSortableColumn="quantidade" style="width:25%">
-                    <div class="flex items-center gap-2">
-                        Quantidade
-                        <p-sortIcon field="quantidade" />
-                    </div>
-                </th>
-            </tr>
-             <tr *ngIf="selectedView === 'pedidos'">  <!-- pedidos -->
-                <th pSortableColumn="id" style="width:15%">
-                    <div class="flex items-center gap-2">
-                        ID
-                        <p-sortIcon field="id" />
-                    </div>
-                </th>
-                <th pSortableColumn="para" style="width:40%">
-                    <div class="flex items-center gap-2">
-                        Para
-                        <p-sortIcon field="para" />
-                    </div>
-                </th>
-                <th style="width:45%">Item(s)</th>
-            </tr>
-        </ng-template>
-        <ng-template #body let-item>
-            <tr *ngIf="selectedView === 'estoque'">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.categoria }}</td>
-                <td>{{ item.quantidade }}</td>
-            </tr>
-            <tr *ngIf="selectedView === 'pedidos'">
-                <td>{{ item.id }}</td>
-                <td>{{ item.para }}</td>
-                <td>
-                    <div *ngFor="let produto of item.items" style="margin-bottom: 0.25rem;">
-                        <strong>{{ produto.name }}</strong> - Qtd: {{ produto.quantidade }}
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
+        <!-- Livros -->
+        <tr *ngIf="selectedView === 'livros'">
+            <th pSortableColumn="ID" style="width:10%">
+                <div class="flex items-center gap-2">
+                    ID
+                    <p-sortIcon field="ID" />
+                </div>
+            </th>
+            <th pSortableColumn="titulo" style="width:30%">
+                <div class="flex items-center gap-2">
+                    Título
+                    <p-sortIcon field="titulo" />
+                </div>
+            </th>
+            <th pSortableColumn="autor" style="width:25%">
+                <div class="flex items-center gap-2">
+                    Autor
+                    <p-sortIcon field="autor" />
+                </div>
+            </th>
+            <th pSortableColumn="ano" style="width:15%">
+                <div class="flex items-center gap-2">
+                    Ano
+                    <p-sortIcon field="ano" />
+                </div>
+            </th>
+            <th pSortableColumn="disponivel" style="width:20%">
+                <div class="flex items-center gap-2">
+                    Disponível
+                    <p-sortIcon field="disponivel" />
+                </div>
+            </th>
+        </tr>
+
+        <!-- Usuários -->
+        <tr *ngIf="selectedView === 'usuarios'">
+            <th pSortableColumn="ID" style="width:15%">
+                <div class="flex items-center gap-2">
+                    ID
+                    <p-sortIcon field="ID" />
+                </div>
+            </th>
+            <th pSortableColumn="nome" style="width:40%">
+                <div class="flex items-center gap-2">
+                    Nome
+                    <p-sortIcon field="nome" />
+                </div>
+            </th>
+            <th pSortableColumn="email" style="width:45%">
+                <div class="flex items-center gap-2">
+                    Email
+                    <p-sortIcon field="email" />
+                </div>
+            </th>
+        </tr>
+
+        <!-- Empréstimos -->
+        <tr *ngIf="selectedView === 'emprestimos'">
+            <th pSortableColumn="ID" style="width:10%">
+                <div class="flex items-center gap-2">
+                    ID
+                    <p-sortIcon field="ID" />
+                </div>
+            </th>
+            <th style="width:25%">Livro</th>
+            <th style="width:25%">Usuário</th>
+            <th pSortableColumn="data_inicio" style="width:15%">
+                <div class="flex items-center gap-2">
+                    Data Início
+                    <p-sortIcon field="data_inicio" />
+                </div>
+            </th>
+            <th pSortableColumn="data_fim" style="width:15%">
+                <div class="flex items-center gap-2">
+                    Data Fim
+                    <p-sortIcon field="data_fim" />
+                </div>
+            </th>
+            <th pSortableColumn="devolvido" style="width:10%">
+                <div class="flex items-center gap-2">
+                    Devolvido
+                    <p-sortIcon field="devolvido" />
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    
+    <ng-template #body let-item>
+        <!-- Livros -->
+        <tr *ngIf="selectedView === 'livros'">
+            <td>{{ item.ID }}</td>
+            <td>{{ item.titulo }}</td>
+            <td>{{ item.autor }}</td>
+            <td>{{ item.ano }}</td>
+            <td>
+                <p-tag 
+                    [value]="item.disponivel ? 'Sim' : 'Não'" 
+                    [severity]="item.disponivel ? 'success' : 'danger'">
+                </p-tag>
+            </td>
+        </tr>
+
+        <!-- Usuários -->
+        <tr *ngIf="selectedView === 'usuarios'">
+            <td>{{ item.ID }}</td>
+            <td>{{ item.nome }}</td>
+            <td>{{ item.email }}</td>
+        </tr>
+
+        <!-- Empréstimos -->
+        <tr *ngIf="selectedView === 'emprestimos'">
+            <td>{{ item.ID }}</td>
+            <td>{{ item.livro?.titulo || 'N/A' }}</td>
+            <td>{{ item.usuario?.nome || 'N/A' }}</td>
+            <td>{{ formatDate(item.data_inicio) }}</td>
+            <td>{{ formatDate(item.data_fim) }}</td>
+            <td>
+                <p-tag 
+                    [value]="item.devolvido ? 'Sim' : 'Não'" 
+                    [severity]="item.devolvido ? 'success' : 'warning'">
+                </p-tag>
+            </td>
+        </tr>
+    </ng-template>
   </p-table>
 </div>
-
