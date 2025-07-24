@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="BibliotecaService"
+   targetNamespace="http://biblioteca.com/soap/definitions"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:tns="http://biblioteca.com/soap/definitions"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <types>
+        <xsd:schema targetNamespace="http://biblioteca.com/soap/definitions">
+            <xsd:element name="EmprestarLivroRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="usuario_id" type="xsd:unsignedInt"/>
+                        <xsd:element name="livro_id" type="xsd:unsignedInt"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="EmprestarLivroResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="sucesso" type="xsd:boolean"/>
+                        <xsd:element name="mensagem" type="xsd:string"/>
+                        <xsd:element name="emprestimo_id" type="xsd:unsignedInt" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+
+    <message name="EmprestarLivroInput">
+        <part name="parameters" element="tns:EmprestarLivroRequest"/>
+    </message>
+    <message name="EmprestarLivroOutput">
+        <part name="parameters" element="tns:EmprestarLivroResponse"/>
+    </message>
+
+    <portType name="BibliotecaPortType">
+        <operation name="EmprestarLivro">
+            <input message="tns:EmprestarLivroInput"/>
+            <output message="tns:EmprestarLivroOutput"/>
+        </operation>
+    </portType>
+
+    <binding name="BibliotecaSoapBinding" type="tns:BibliotecaPortType">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="EmprestarLivro">
+            <soap:operation soapAction="EmprestarLivro"/>
+            <input><soap:body use="literal"/></input>
+            <output><soap:body use="literal"/></output>
+        </operation>
+    </binding>
+
+    <service name="BibliotecaService">
+        <port name="BibliotecaPort" binding="tns:BibliotecaSoapBinding">
+            <soap:address location="http://localhost:8080/ws"/>
+        </port>
+    </service>
+</definitions>
