@@ -142,10 +142,9 @@ def emprestimos_view(request):
                 livro_id = request.data.get('livro_id')
                 usuario_id = request.data.get('usuario_id')
                 logger.error(f"DEBUG: usuario_id={usuario_id}, livro_id={livro_id}")
-                # Chama o método SOAP (ajuste o nome conforme seu WSDL)
                 response = client.service.EmprestarLivro(livro_id=livro_id, usuario_id=usuario_id)
-                # Retorna a resposta SOAP como JSON para o frontend
-                return Response({
+
+                return Response({       
                     'mensagem': getattr(response, 'Mensagem', ''),
                     'sucesso': getattr(response, 'Sucesso', False),
                     'emprestimo_id': getattr(response, 'EmprestimoID', None)
