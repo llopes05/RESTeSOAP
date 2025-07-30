@@ -21,8 +21,13 @@ go.work.sum
 .idea/
 *.swp
 
+
 # SQLite database
 *.db
+
+# Python venv
+gateway-django/venv/
+venv/
 
 
 # Node/Angular

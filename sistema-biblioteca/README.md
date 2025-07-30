@@ -39,6 +39,9 @@ sudo apt install protobuf-compiler
 protoc --go_out=./proto --go-grpc_out=./proto --proto_path=. proto/biblioteca.proto
 ```
 
+
+
+
 # Como Rodar
 
 ## API REST
@@ -78,5 +81,44 @@ docker run -p 8080:8080 biblioteca-app
 ```bash
 docker run -p 50051:50051 biblioteca-app /app/biblioteca-grpc
 ```
+
+# Gateway Django (API REST/SOAP)
+
+Para rodar o gateway Django (REST/SOAP):
+
+1. Crie e ative um ambiente virtual Python:
+   ```bash
+   cd ../gateway-django
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+2. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Rode o servidor Django:
+   ```bash
+   python manage.py runserver 8000
+   ```
+   O gateway estará disponível em http://localhost:8000
+
+# Frontend Angular
+
+Para rodar o frontend Angular:
+
+1. Instale o Angular CLI globalmente (caso ainda não tenha):
+   ```bash
+   npm install -g @angular/cli
+   ```
+2. Instale as dependências do frontend:
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+3. Rode o servidor de desenvolvimento:
+   ```bash
+   ng serve
+   ```
+   O frontend estará disponível em http://localhost:4200
 
 > Obs: Certifique-se de que as portas desejadas estejam livres no seu sistema antes de rodar o container.

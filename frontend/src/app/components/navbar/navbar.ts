@@ -26,6 +26,11 @@ export class Navbar {
       label: 'Criar Empréstimo',
       icon: 'pi pi-calendar',
       routerLink: ['/criar-emprestimo']
+    },
+    {
+      label: 'Criar Usuário',
+      icon: 'pi pi-user-plus',
+      routerLink: ['/criarusuario']
     }
   ];
 }

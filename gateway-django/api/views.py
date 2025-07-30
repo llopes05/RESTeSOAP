@@ -1,4 +1,6 @@
 import requests
+from zeep import Client, Settings
+from zeep.transports import Transport
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -125,7 +127,6 @@ def emprestimos_view(request):
     try:
         if request.method == 'GET':
             response = requests.get(f'{GO_BACKEND_URL}/emprestimos')
-            
             if response.status_code == 200:
                 return Response(response.json(), status=status.HTTP_200_OK)
             else:
@@ -133,26 +134,25 @@ def emprestimos_view(request):
                     {'error': 'Erro ao buscar empréstimos no backend'}, 
                     status=response.status_code
                 )
-                
         elif request.method == 'POST':
-            response = requests.post(
-                f'{GO_BACKEND_URL}/emprestimos',
-                json=request.data,
-                headers={'Content-Type': 'application/json'}
-            )
-            
-            if response.status_code in [200, 201]:
-                try:
-                    data = response.json()
-                except ValueError:
-                    data = request.data
-                return Response(data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(
-                    {'error': 'Erro ao criar empréstimo no backend'}, 
-                    status=response.status_code
-                )
-                
+            # Chamada SOAP para criar empréstimo
+            try:
+                wsdl_url = f'{GO_BACKEND_URL}/soap/biblioteca.wsdl'
+                client = Client(wsdl=wsdl_url, settings=Settings(strict=False), transport=Transport(timeout=10))
+                livro_id = request.data.get('livro_id')
+                usuario_id = request.data.get('usuario_id')
+                logger.error(f"DEBUG: usuario_id={usuario_id}, livro_id={livro_id}")
+                # Chama o método SOAP (ajuste o nome conforme seu WSDL)
+                response = client.service.EmprestarLivro(livro_id=livro_id, usuario_id=usuario_id)
+                # Retorna a resposta SOAP como JSON para o frontend
+                return Response({
+                    'mensagem': getattr(response, 'Mensagem', ''),
+                    'sucesso': getattr(response, 'Sucesso', False),
+                    'emprestimo_id': getattr(response, 'EmprestimoID', None)
+                }, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                logger.error(f"Erro ao consumir SOAP: {str(e)}")
+                return Response({'error': 'Erro ao comunicar com o backend SOAP'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except requests.exceptions.ConnectionError:
         logger.error("Erro de conexão com o backend Go")
         return Response(

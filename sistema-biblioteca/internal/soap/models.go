@@ -13,15 +13,15 @@ type EmprestarLivroBody struct {
 }
 
 type EmprestarLivroRequest struct {
-	XMLName   xml.Name `xml:"http://biblioteca.com/soap/definitions EmprestarLivroRequest"`
-	UsuarioID uint     `xml:"usuario_id"`
-	LivroID   uint     `xml:"livro_id"`
+   XMLName   xml.Name `xml:"http://biblioteca.com/soap/definitions EmprestarLivroRequest"`
+   UsuarioID uint     `xml:"usuario_id"`
+   LivroID   uint     `xml:"livro_id"`
 }
 
 
 type SOAPResponseEnvelope struct {
-	XMLName xml.Name         `xml:"soap:Envelope"`
-	Body    SOAPResponseBody `xml:"soap:Body"`
+   XMLName xml.Name         `xml:"http://schemas.xmlsoap.org/soap/envelope/ Envelope"`
+   Body    SOAPResponseBody `xml:"soap:Body"`
 }
 
 type SOAPResponseBody struct {

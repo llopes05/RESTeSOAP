@@ -1,0 +1,22 @@
+<app-navbar></app-navbar>
+<div class="p-d-flex p-jc-center p-mt-5">
+<p-card [style]="{width: '400px'}">
+    <ng-template pTemplate="header">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <span class="p-card-title"><i class="pi pi-user-plus p-mr-2"></i> Criar Usuário</span>
+      </div>
+    </ng-template>
+    <form (ngSubmit)="criarUsuario()" #usuarioForm="ngForm" autocomplete="off">
+      <div class="p-field p-mb-3">
+        <label for="nome">Nome</label>
+        <input pInputText type="text" id="nome" name="nome" [(ngModel)]="usuario.nome" required autocomplete="off" />
+      </div>
+      <div class="p-field p-mb-3">
+        <label for="email">Email</label>
+        <input pInputText type="email" id="email" name="email" [(ngModel)]="usuario.email" required autocomplete="off" />
+      </div>
+      <button pButton type="submit" label="Criar Usuário" icon="pi pi-user-plus" [disabled]="loading" class="p-button-primary p-mt-2" style="width: 100%"></button>
+    </form>
+    <p-message *ngIf="mensagem" [severity]="sucesso ? 'success' : 'error'" [text]="mensagem" class="p-mt-3"></p-message>
+  </p-card>
+</div>

@@ -25,6 +25,7 @@ func SoapHandler(c *gin.Context, db *gorm.DB) {
 		return
 	}
 	requestData := requestEnvelope.Body.Request
+	fmt.Printf("[SOAP DEBUG] UsuarioID=%d, LivroID=%d\n", requestData.UsuarioID, requestData.LivroID)
 	if requestData.XMLName.Local != "EmprestarLivroRequest" {
 		respondWithError(c, "Ação SOAP 'EmprestarLivroRequest' não encontrada no Body")
 		return
@@ -32,11 +33,13 @@ func SoapHandler(c *gin.Context, db *gorm.DB) {
 
 	var livro models.Livro
 	if err := db.First(&livro, requestData.LivroID).Error; err != nil {
+		fmt.Printf("[SOAP DEBUG] Erro ao buscar livro: %v\n", err)
 		respondWithError(c, "Livro não encontrado")
 		return
 	}
 
 	if !livro.Disponivel {
+		fmt.Println("[SOAP DEBUG] Livro não está disponível para empréstimo")
 		respondWithError(c, "Livro não está disponível para empréstimo")
 		return
 	}
@@ -50,6 +53,7 @@ func SoapHandler(c *gin.Context, db *gorm.DB) {
 	}
 
 	if err := db.Create(&emprestimo).Error; err != nil {
+		fmt.Printf("[SOAP DEBUG] Erro ao salvar o empréstimo: %v\n", err)
 		respondWithError(c, "Erro ao salvar o empréstimo no banco de dados")
 		return
 	}
@@ -70,6 +74,7 @@ func SoapHandler(c *gin.Context, db *gorm.DB) {
 }
 
 func respondWithError(c *gin.Context, message string) {
+	fmt.Printf("[SOAP DEBUG] respondWithError: %s\n", message)
 	fault := SOAPFault{
 		FaultCode:   "Client",
 		FaultString: message,
