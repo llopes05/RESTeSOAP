@@ -7,6 +7,7 @@ import (
 	"github.com/llopes05/RESTeSOAP/internal/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"github.com/llopes05/RESTeSOAP/internal/queue"
 )
 
 // ErrorResponse representa uma resposta de erro para Swagger
@@ -233,6 +234,15 @@ func criarEmprestimo(c *gin.Context, db *gorm.DB) {
 	}
 	livro.Disponivel = false
 	db.Save(&livro)
+
+	// Publica evento no RabbitMQ
+	evento := queue.EventoBiblioteca{
+		Evento:    "emprestimo",
+		UsuarioID: emprestimo.UsuarioID,
+		LivroID:   emprestimo.LivroID,
+		Mensagem:  "Livro emprestado com sucesso!",
+	}
+	_ = queue.PublishEvento(evento)
 	c.JSON(http.StatusCreated, emprestimo)
 }
 
